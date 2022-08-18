@@ -56,17 +56,31 @@ namespace Manipulation
 
         }
 
+        const double PI = Math.PI;
+        const float Forearm = Manipulator.Forearm;
+        const float Palm = Manipulator.Palm;
+        const float UpperArm = Manipulator.UpperArm;
 
-        // Доработайте эти тесты!
-        // С помощью строчки TestCase можно добавлять новые тестовые данные.
-        // Аргументы TestCase превратятся в аргументы метода.
-        [TestCase(Math.PI / 2, Math.PI / 2, Math.PI, Manipulator.Forearm + Manipulator.Palm, Manipulator.UpperArm)]
+        [TestCase(PI / 2, PI / 2, PI, Forearm + Palm, UpperArm)]
+        [TestCase(PI / 2, PI / 2, PI / 2, Forearm, UpperArm - Palm)]
+        [TestCase(PI / 2, 3 * PI / 2, 3 * PI / 2, -Forearm, UpperArm - Palm)]
+        [TestCase(PI / 2, PI, 3 * PI, 0, Forearm + UpperArm + Palm)]
+
         public void TestGetJointPositions(double shoulder, double elbow, double wrist, double palmEndX, double palmEndY)
         {
             var joints = AnglesToCoordinatesTask.GetJointPositions(shoulder, elbow, wrist);
             Assert.AreEqual(palmEndX, joints[2].X, 1e-5, "palm endX");
             Assert.AreEqual(palmEndY, joints[2].Y, 1e-5, "palm endY");
-            //Assert.Fail("TODO: проверить, что расстояния между суставами равны длинам сегментов манипулятора!");
+            Assert.AreEqual(GetDistance(joints[0], new PointF(0, 0)), UpperArm);
+            Assert.AreEqual(GetDistance(joints[0], joints[1]), Forearm);
+            Assert.AreEqual(GetDistance(joints[1], joints[2]), Palm);
+        }
+
+        public double GetDistance(PointF point1, PointF point2)
+        {
+            var differenceX = (point1.X - point2.X) * (point1.X - point2.X);
+            var differenceY = (point1.Y - point2.Y) * (point1.Y - point2.Y);
+            return Math.Sqrt(differenceX + differenceY);
         }
     }
 }
