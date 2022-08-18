@@ -5,6 +5,9 @@ namespace Manipulation
 {
     public static class ManipulatorTask
     {
+        const float maxLengthManipulator = Manipulator.Forearm
+                + Manipulator.Palm + Manipulator.UpperArm;
+
         /// <summary>
         /// Возвращает массив углов (shoulder, elbow, wrist),
         /// необходимых для приведения эффектора манипулятора в точку x и y 
@@ -16,6 +19,9 @@ namespace Manipulation
             // Используйте поля Forearm, UpperArm, Palm класса Manipulator
             return new[] { double.NaN, double.NaN, double.NaN };
         }
+
+        private static bool CanMove(double xWrist, double yWrist)
+        => Math.Sqrt(xWrist * xWrist + yWrist * yWrist) < maxLengthManipulator;
     }
 
     [TestFixture]
