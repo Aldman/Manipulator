@@ -19,14 +19,38 @@ namespace Manipulation
 		public static Pen ManipulatorPen = new Pen(Color.Black, 3);
 		public static Brush JointBrush = Brushes.Gray;
 
-		public static void KeyDown(Form form, KeyEventArgs key)
-		{
-			// TODO: Добавьте реакцию на QAWS и пересчитывать Wrist
-			form.Invalidate(); // 
-		}
+        public static void KeyDown(Form form, KeyEventArgs key)
+        {
+            // TODO: Добавьте реакцию на QAWS и пересчитывать Wrist
+            if (IsKeyEqualsQAWS(key))
+            {
+                switch (key.KeyCode)
+                {
+                    case Keys.Q:
+                        Shoulder += 0.1;
+                        break;
+                    case Keys.A:
+                        Shoulder -= 0.1;
+                        break;
+                    case Keys.W:
+                        Elbow += 0.1;
+                        break;
+                    case Keys.S:
+                        Elbow -= 0.1;
+                        break;
+                    default: break;
+                }
+                Wrist = -Alpha - Shoulder - Elbow;
+                form.Invalidate();
+            }
+        }
+
+        private static bool IsKeyEqualsQAWS(KeyEventArgs key)
+        => (key.KeyCode == Keys.Q || key.KeyCode == Keys.A
+            || key.KeyCode == Keys.W || key.KeyCode == Keys.S);
 
 
-		public static void MouseMove(Form form, MouseEventArgs e)
+        public static void MouseMove(Form form, MouseEventArgs e)
 		{
 			// TODO: Измените X и Y пересчитав координаты (e.X, e.Y) в логические.
 
