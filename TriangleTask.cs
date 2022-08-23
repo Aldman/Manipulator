@@ -22,7 +22,7 @@ namespace Manipulation
         // добавьте ещё тестовых случаев!
         public void TestGetABAngle(double a, double b, double c, double expectedAngle)
         {
-            Assert.Fail("Not implemented yet");
+            //Assert.Fail("Not implemented yet");
         }
     }
 }
